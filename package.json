@@ -1,0 +1,39 @@
+{
+    "name": "server_ws",
+    "version": "1.0.0",
+    "description": "server ws for chat",
+    "main": "index.js",
+    "scripts": {
+        "db:mongo": "sudo systemctl start mongod",
+        "start": "npx pino-pretty | node index.js",
+        "dev": "cross-env | npx pino-pretty | npm run db:mongo && nodemon index.js ",
+        "win": "cross-env | npx pino-pretty | nodemon index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/Lotus-uems-front/server_ws.git"
+    },
+    "author": "Leonid Kudryashov",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Lotus-uems-front/server_ws/issues"
+    },
+    "homepage": "https://github.com/Lotus-uems-front/server_ws#readme",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "body-parser": "^1.20.2",
+        "cors": "^2.8.5",
+        "cross-env": "^7.0.3",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "express-ws": "^5.0.2",
+        "mongodb": "^4.1.0",
+        "nanoid": "^5.0.1",
+        "pino": "^8.15.6",
+        "ws": "^8.14.2"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1",
+        "pino-pretty": "^10.2.3"
+    }
+}
