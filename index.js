@@ -58,7 +58,7 @@ const wss = new WebSocket.Server({ port: PORT_WS },
     }
 ); // ws
 
-//* WS подключение
+//* WS подключение NEW
 wss.on('connection', (ws, req) => {
     console.log(`CONNECTING`); // test
     ws.send(JSON.stringify({ 'Ответ с сервера': 'ОТВЕТ С СЕРВЕРА, подключение WS' })) // сообщене для клиента
