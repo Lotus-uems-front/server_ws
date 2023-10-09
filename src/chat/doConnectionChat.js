@@ -5,7 +5,7 @@ module.exports = async (msg, DB) => {
 
     const idDocum = { _id: msg.id };
 
-    console.log(`MESSAGE::: `, msg.data); // сообщенеи с клиента
+    console.log(`MESSAGE::: `, msg); // сообщенеи с клиента
     switch (msg.method) {
 
         case 'connection':
