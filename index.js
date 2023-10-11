@@ -1,6 +1,6 @@
 require('dotenv').config();
 const WebSocket = require('ws'); // ws
-// const { WebSocketServer } = require('ws');
+const { WebSocketServer } = require('ws'); // ws
 const express = require("express");
 const cors = require('cors'); //отключает CORS
 const MongoClient = require('mongodb').MongoClient;
@@ -51,50 +51,65 @@ const DB = async () => {
 }
 
 //* создание WSS, подключение по порту  (на FRONTENDE указать URL до сервера, для стыковки WS)
-const wss = new WebSocket.Server({ port: PORT_WS },
-    () => {
-        logger.info(`Server WS listens port for chat, PORT: ${PORT_WS}`); // logger
-        console.log(`Server WS listens port for chat, PORT: ${PORT_WS}`);
-    }
-); // ws
+const io = require('socket.io')()
+io.listen(PORT_WS)
+
+// const wss = new WebSocketServer({ port: PORT_WS },
+//     () => {
+//         logger.info(`Server WS listens port for chat, PORT: ${PORT_WS}`); // logger
+//         console.log(`Server WS listens port for chat, PORT: ${PORT_WS}`);
+//     }
+// ); // ws
+
+//* socket.io подключение
+io.on('connection', (socket) => {
+
+    socket.on('message', (message) => {
+        console.log(`MESSAGE::: `, JSON.parse(message))
+    });
+    socket.send({ message: 'HELLO!!! My name is SERVER' })
+})
 
 //* WS подключение NEW
-wss.on('connection', (ws, req) => {
-    console.log(`CONNECTING`); // test
-    ws.send(JSON.stringify({ 'Ответ с сервера': 'ОТВЕТ С СЕРВЕРА, подключение WS' })) // сообщене для клиента
+// wss.on('connection', (ws, req) => {
+//     console.log(`CONNECTING`); // test
+//     // console.log(`HEADERS:::: `, req.headers); // req.headers['x-forwarded-for']
 
-    console.log(`WS chat from IP: `, req.socket.remoteAddress); // test
-    console.log(`HEADERS: `, req.headers); // test
-    console.log(`websocket KEY: `, req.headers['sec-websocket-key']); // test
 
-    ws.on('close', () => {
-        console.log(`CLOSE WS `);
-    })
+//     ws.send(JSON.stringify({ 'Ответ с сервера': 'ОТВЕТ С СЕРВЕРА, подключение WS' })) // сообщене для клиента
 
-    ws.on('message', async (message) => {
+//     // console.log(`WS chat from IP: `, req.socket.remoteAddress); // test
+//     // console.log(`HEADERS: `, req.headers); // test
+//     // console.log(`websocket KEY: `, req.headers['sec-websocket-key']); // test
 
-        const msg = JSON.parse(message)
-        let resultChat;
+//     ws.on('close', () => {
+//         console.log(`CLOSE WS `);
+//     })
 
-        if (msg.method === 'end_chat') {
-            console.log(`Закрыли соединение WS на FRONT`);
-            resultChat = await doConnectionChat(msg, await DB())
+//     ws.on('message', async (message) => {
 
-        } else {
-            resultChat = await doConnectionChat(msg, await DB())
+//         const msg = JSON.parse(message)
+//         let resultChat;
 
-            wss.clients.forEach(client => {
+//         if (msg.method === 'end_chat') {
+//             console.log(`Закрыли соединение WS на FRONT`);
+//             resultChat = await doConnectionChat(msg, await DB())
 
-                if (client.readyState === WebSocket.OPEN) {
+//         } else {
+//             resultChat = await doConnectionChat(msg, await DB())
 
-                    // ? необходимость этой проверки, если есть подобная на клиенте???
-                    if (resultChat._id === msg.id) {
-                        client.send(JSON.stringify(resultChat))
-                    }
-                }
-            })
-        }
-    });
-})
+//             wss.clients.forEach(client => {
+
+//                 if (client.readyState === WebSocket.OPEN) {
+
+//                     // ? необходимость этой проверки, если есть подобная на клиенте???
+//                     if (resultChat._id === msg.id) {
+//                         client.send(JSON.stringify(resultChat))
+//                     }
+//                 }
+//             })
+//         }
+//     });
+// })
 
 

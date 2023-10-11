@@ -30,6 +30,7 @@
         "mongodb": "^4.1.0",
         "nanoid": "^5.0.1",
         "pino": "^8.15.6",
+        "socket.io": "^4.7.2",
         "ws": "^8.14.2"
     },
     "devDependencies": {
