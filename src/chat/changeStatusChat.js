@@ -1,5 +1,5 @@
 /**
- * 
+ * Меняет состояние чата
  * @param {Object} msg  сообщение чата
  * @param {Object} DB  объект базы данных
  * @returns void - Меняет в выбранном чате lookStatus на true

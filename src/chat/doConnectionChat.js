@@ -1,6 +1,12 @@
 const changeStatusChat = require("./changeStatusChat");
 const lookWriteChat = require("./lookWriteChat");
 
+/**
+ * Обработка методов чата
+ * @param {Object} msg сообщение чата
+ * @param {Object} DB база данных
+ * @returns результат зависит от методов
+ */
 module.exports = async (msg, DB) => {
 
     const idDocum = { _id: msg.id };

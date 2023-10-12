@@ -1,5 +1,5 @@
 /**
- * 
+ * Дописывает состояние чата
  * @param {Object} msg объект сообщения
  * @param {Object} DB объект базы данных
  * @returns void - в DB дописывает объект состояния чата: lookStatus = false
