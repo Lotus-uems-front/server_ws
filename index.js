@@ -9,14 +9,14 @@ const logger = require('./logger');
 const doConnectionChat = require('./src/chat/doConnectionChat');
 
 const app = express();
-const jsonParser = express.json();
 
-app.use(cors()); // отключает CORS
+const jsonParser = express.json();
+app.use(cors());
 app.use(jsonParser);
 
 const PORT_WS = process.env.PORTWS || 3031;
 
-const io = new Server({}) // * WS Server connection
+const io = new Server({ cors: { origin: '*' } }) // * WS Server connection
 
 //* подключение к Mongodb
 const dbName = 'usersdb';
