@@ -9,14 +9,18 @@ const logger = require('./logger');
 const doConnectionChat = require('./src/chat/doConnectionChat');
 
 const app = express();
-
 const jsonParser = express.json();
 app.use(cors());
 app.use(jsonParser);
 
 const PORT_WS = process.env.PORTWS || 3031;
 
-const io = new Server({ cors: { origin: '*' } }) // * WS Server connection
+//* Запуск сервера WS на socket.io
+const io = new Server({ cors: { origin: '*' } })
+
+if (io) {
+    console.log(`Runing Server ws connection on socket.io, port: ${PORT_WS}`)
+}
 
 //* подключение к Mongodb
 const dbName = 'usersdb';
@@ -59,16 +63,26 @@ io.on('connection', async (socket) => {
         //* исходящее сообщение
         socket.emit('text', 'HELLO!!! My name is SERVER')
 
+        console.log("initial transport", socket.conn.transport.name); // prints "polling"
+
         //* входящие сообщения
         socket.on('message', async (message) => {
             const msg = JSON.parse(message)
 
-            // todo: сделать обработчик входящих сообщений
+            // *: сделать обработчик входящих сообщений
             console.log(`MESSAGE::: `, msg) // test
             const result = await doConnectionChat(msg, await DB())
 
-            if (result) {
-                socket.emit('message chat', result)
+            if (result && result !== 'disconnect') {
+                console.log(`message-chat run................................`); // test
+                socket.emit('message-chat', result)
+            }
+
+            if (result === 'disconnect') {
+                console.log(`message-chat -> disconnect`); //test
+                socket.on("disconnect", () => {
+                    console.log(`Соединение WS разорвано программно`);
+                })
             }
         });
     } catch (err) {

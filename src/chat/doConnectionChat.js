@@ -39,6 +39,7 @@ module.exports = async (msg, DB) => {
         case 'end_chat':
             console.log('end_chat', msg.message);
             await changeStatusChat(msg, DB)
+            return 'disconnect';
             break;
     }
 }
