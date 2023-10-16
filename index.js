@@ -74,8 +74,9 @@ io.on('connection', async (socket) => {
             const result = await doConnectionChat(msg, await DB())
 
             if (result && result !== 'disconnect') {
-                console.log(`message-chat run................................`); // test
+                console.log(`message-chat run................................`, result.data[result.data.length - 1].name); // test
                 socket.emit('message-chat', result)
+                socket.broadcast.emit('message-chat', result) // broadcast
             }
 
             if (result === 'disconnect') {
