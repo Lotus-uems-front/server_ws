@@ -24,8 +24,6 @@ if (io) {
 
 //* подключение к Mongodb
 const dbName = 'usersdb';
-// const url = `mongodb://localhost:27017`;
-// const url = `mongodb://127.0.0.1:27017`;
 const url = `mongodb://0.0.0.0:27017`;
 const clientPromise = new MongoClient(url, { useUnifiedTopology: true, maxPoolSize: 10 }); // новое подключение
 
@@ -36,7 +34,6 @@ app.use(async (req, res, next) => {
         req.db = client.db(dbName);
         next();
     } catch (err) {
-        // console.log(chalk.red(`Ошибка формирования объекта подключения к mongodb, ERROR: `, err));
         logger.error(err, `Error, create Object MongoDB`)
         next(err);
     }
@@ -63,7 +60,7 @@ io.on('connection', async (socket) => {
         //* исходящее сообщение
         socket.emit('text', 'HELLO!!! My name is SERVER')
 
-        console.log("initial transport", socket.conn.transport.name); // prints "polling"
+        // console.log("initial transport", socket.conn.transport.name); // prints "polling"
 
         //* входящие сообщения
         socket.on('message', async (message) => {
@@ -74,7 +71,7 @@ io.on('connection', async (socket) => {
             const result = await doConnectionChat(msg, await DB())
 
             if (result && result !== 'disconnect') {
-                console.log(`message-chat run................................`, result.data[result.data.length - 1].name); // test
+                // console.log(`message-chat run................................`, result.data[result.data.length - 1].name); // test
                 socket.emit('message-chat', result)
                 socket.broadcast.emit('message-chat', result) // broadcast
             }
